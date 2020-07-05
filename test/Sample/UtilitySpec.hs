@@ -48,17 +48,23 @@ run = do
     context "when AppData default" $ do
       it "should be 10" $ do
         putStrLn "[INFO] 1件目の試験を実施"
-        (Right v) <- U.runApp def app10
-        10 `shouldBe` v
+        let expect = 10
+
+        (Right actual) <- U.runApp def app10
+
+        expect `shouldBe` actual
 
       it "should exception catched" $ do
         putStrLn "[INFO] 2件目の試験を実施"
-        (Left e) <- U.runApp def appLeft
-        e `shouldSatisfy` (not . null)
+
+        (Left actual) <- U.runApp def appLeft
+
+        actual `shouldSatisfy` (not . null)
         U.runApp def appLeft `shouldReturn` Left "Prelude.head: empty list"
 
       it "should exception throwed" $ do
         putStrLn "[INFO] 3件目の試験を実施"
+
         appException `shouldThrow` anyException
         appException `shouldThrow` errorCall "Prelude.head: empty list"
 
