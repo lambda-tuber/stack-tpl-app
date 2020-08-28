@@ -3,6 +3,8 @@ module Main where
 import System.Exit
 import Options.Applicative
 import qualified Control.Exception.Safe as E
+import Paths_sample (version)
+import Data.Version (showVersion)
 
 import Sample.Control
 
@@ -35,12 +37,24 @@ getArgs = execParser parseInfo
 -- |
 --
 parseInfo :: ParserInfo ArgData
-parseInfo = info options $ mconcat
+parseInfo = info (helper <*> verOpt <*> options) $ mconcat
   [ fullDesc
   , header   "This is app program."
   , footer   "Copyright 2020. All Rights Reserved."
   , progDesc "This is app program description."
   ]
+
+-- |
+--
+verOpt :: Parser (a -> a)
+verOpt = infoOption msg $ mconcat
+  [ short 'v'
+  , long  "version"
+  , help  "Show version"
+  ]
+  where
+    msg = "app-" ++ showVersion version
+
 
 -- |
 --
